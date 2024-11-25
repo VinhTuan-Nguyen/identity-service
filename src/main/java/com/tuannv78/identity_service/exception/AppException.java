@@ -1,5 +1,7 @@
 package com.tuannv78.identity_service.exception;
 
+import com.tuannv78.identity_service.enums.ErrorCode;
+
 public class AppException extends RuntimeException {
 
     private ErrorCode errorCode;
