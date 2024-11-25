@@ -62,10 +62,9 @@ public class AuthenticationService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         boolean authenticated = passwordEncoder.matches(
                 request.getPassword(),
-                user.getPassword()
-        );
+                user.getPassword());
 
-        if(!authenticated)
+        if (!authenticated)
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         var token = generateToken(request.getUsername());
 
@@ -85,9 +84,7 @@ public class AuthenticationService {
                 .expirationTime(new Date(
                         Instant.now().plus(
                                 1,
-                                ChronoUnit.HOURS
-                        ).toEpochMilli()
-                ))
+                                ChronoUnit.HOURS).toEpochMilli()))
                 .claim("customClaim", "Custom")
                 .build();
 
