@@ -1,4 +1,4 @@
 # Identity Service API Application
 
 ## Application Structure
-![alt text](Identity-Service-API.png)
+![Application Structure](src/main/resources/static%2FIdentity-Service-API.png)

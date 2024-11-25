@@ -1,6 +1,5 @@
 package com.tuannv78.identity_service.dto.response;
 
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

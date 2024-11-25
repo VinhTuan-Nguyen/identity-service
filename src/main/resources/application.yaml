@@ -1,23 +1,35 @@
 server:
+  # ${server.port}
   port: 8080
   servlet:
+    # ${server.servlet.context-path}
     context-path: /identity
 
 spring:
   application:
+    # ${spring.application.name}
     name: "identity-service"
   datasource:
+    # ${spring.datasource.url}
     url: "jdbc:mysql://localhost:3306/identity_service"
+    # ${spring.datasource.username}
     username: root
+    # ${spring.datasource.password}
     password: root
   jpa:
     hibernate:
+      # ${spring.jpa.hibernate.ddl-auto}
       ddl-auto: update
+    # ${spring.jpa.show-sql}
     show-sql: true
 
 jwt:
+  # ${jwt.signerKey}
   signerKey: "4hdI75XdHDIFA2TKTvXYW45eOB7N7xV5XtOJEeAxvFlZi3hVm43mav2QHQROSqVE"
+  # ${jwt.issuer}
   issuer: "localhost.com"
   claim:
+    # ${jwt.claim.name}
     name: "customClaim"
+    # ${jwt.claim.value}
     value: "Custom"
