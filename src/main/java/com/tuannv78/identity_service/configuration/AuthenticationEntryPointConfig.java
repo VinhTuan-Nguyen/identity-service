@@ -2,7 +2,7 @@ package com.tuannv78.identity_service.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tuannv78.identity_service.dto.ApiResponse;
-import com.tuannv78.identity_service.enums.ErrorCode;
+import com.tuannv78.identity_service.enums.ErrorCodeEnum;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ public class AuthenticationEntryPointConfig implements AuthenticationEntryPoint 
             HttpServletResponse response,
             AuthenticationException authException
     ) throws IOException, ServletException {
-        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
+        ErrorCodeEnum errorCode = ErrorCodeEnum.UNAUTHENTICATED;
         response.setStatus(errorCode.getStatusCode().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 

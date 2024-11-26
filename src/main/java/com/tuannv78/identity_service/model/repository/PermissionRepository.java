@@ -1,14 +1,10 @@
 package com.tuannv78.identity_service.model.repository;
 
-import com.tuannv78.identity_service.entity.User;
+import com.tuannv78.identity_service.entity.Permission;
+import com.tuannv78.identity_service.enums.PermissionEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
-    boolean existsByUsername(String username);
-
-    Optional<User> findByUsername(String username);
+public interface PermissionRepository extends JpaRepository<Permission, PermissionEnum> {
 }

@@ -234,12 +234,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}{{path}}/7f8899c9-560c-40ca-9b33-d8bda346f089",
+							"raw": "{{baseUrl}}{{path}}/11eeeedf-ff8c-498e-a3b3-abda93bc4c34",
 							"host": [
 								"{{baseUrl}}{{path}}"
 							],
 							"path": [
-								"7f8899c9-560c-40ca-9b33-d8bda346f089"
+								"11eeeedf-ff8c-498e-a3b3-abda93bc4c34"
 							]
 						}
 					},
@@ -288,7 +288,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"vinhtuan12\",\r\n    \"password\": \"13245678\",\r\n    \"firstName\": \"Nguyễn Vĩnh\",\r\n    \"lastName\": \"Tuân\",\r\n    \"dob\": \"1997-06-01\"\r\n}",
+							"raw": "{\r\n    \"username\": \"vinhtuan3\",\r\n    \"password\": \"13245678\",\r\n    \"firstName\": \"Nguyễn Vĩnh\",\r\n    \"lastName\": \"Tuân\",\r\n    \"dob\": \"2023-06-01\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -392,6 +392,129 @@
 			]
 		},
 		{
+			"name": "Role API",
+			"item": [
+				{
+					"name": "Getting All Roles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{path}}",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creating New Role",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"ADMIN\",\r\n    \"description\": \"Admin Role\",\r\n    \"permissions\": [\"REJECT_POST\", \"CREATE_POST\", \"APPROVE_POST\"]\r\n}\r\n// {\r\n//     \"name\": \"USER1\",\r\n//     \"description\": \"User Role\",\r\n//     \"permissions\": [\"CREATE_POST\"]\r\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{path}}",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting Role",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{path}}/HAHAH",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							],
+							"path": [
+								"HAHAH"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.variables.set(\"path\", \"/roles\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
 			"name": "Permission API",
 			"item": [
 				{
@@ -435,7 +558,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"UPDATE_DATA\",\r\n    \"description\": \"Approve a post\"\r\n}",
+							"raw": "{\r\n    \"name\": \"CREATE_POST\",\r\n    \"description\": \"Create a post\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

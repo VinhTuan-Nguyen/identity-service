@@ -25,8 +25,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request) {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.createUser(request));
         return apiResponse;
     }
@@ -70,10 +70,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    ApiResponse<?> deleteUser(@PathVariable String userId) {
+    ApiResponse<Void> deleteUser(@PathVariable String userId) {
         userService.deleteUser(userId);
-        return ApiResponse.builder()
-                .message("User has deleted")
+        return ApiResponse.<Void>builder()
+                .message(String.format("User %s has deleted", userId))
                 .build();
     }
 }

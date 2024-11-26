@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatusCode;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public enum ErrorCode {
+public enum ErrorCodeEnum {
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_KEY(1001, "Invalid message key", HttpStatus.BAD_REQUEST),
     USER_EXISTED(1002, "User existed", HttpStatus.BAD_REQUEST),
@@ -17,13 +17,14 @@ public enum ErrorCode {
     USER_NOT_EXISTED(1005, "User not existed", HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
-    JWS_NOT_VALID(1008, "Payload of JWS object is not a valid JSON object", HttpStatus.BAD_REQUEST);
+    JWS_NOT_VALID(1008, "Payload of JWS object is not a valid JSON object", HttpStatus.BAD_REQUEST),
+    INVALID_DOB(1009, "Invalid date of birth", HttpStatus.BAD_REQUEST);
 
     int code;
     String message;
     HttpStatusCode statusCode;
 
-    ErrorCode(int code, String message, HttpStatusCode statusCode) {
+    ErrorCodeEnum(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
         this.message = message;
         this.statusCode = statusCode;

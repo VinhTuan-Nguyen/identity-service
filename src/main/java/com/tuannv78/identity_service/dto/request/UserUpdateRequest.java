@@ -1,9 +1,11 @@
 package com.tuannv78.identity_service.dto.request;
 
+import com.tuannv78.identity_service.enums.RoleEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -16,4 +18,5 @@ public class UserUpdateRequest {
     String lastName;
     LocalDate dob;
 
+    List<RoleEnum> roles;
 }
