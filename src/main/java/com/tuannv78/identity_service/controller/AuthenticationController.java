@@ -1,11 +1,13 @@
 package com.tuannv78.identity_service.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.tuannv78.identity_service.dto.ApiResponse;
-import com.tuannv78.identity_service.dto.request.AuthenticationRequest;
-import com.tuannv78.identity_service.dto.request.IntrospectRequest;
-import com.tuannv78.identity_service.dto.response.AuthenticationResponse;
-import com.tuannv78.identity_service.dto.response.IntrospectResponse;
+import com.tuannv78.identity_service.common.dto.ApiResponse;
+import com.tuannv78.identity_service.common.dto.request.AuthenticationRequest;
+import com.tuannv78.identity_service.common.dto.request.IntrospectRequest;
+import com.tuannv78.identity_service.common.dto.request.LogoutRequest;
+import com.tuannv78.identity_service.common.dto.request.RefreshRequest;
+import com.tuannv78.identity_service.common.dto.response.AuthenticationResponse;
+import com.tuannv78.identity_service.common.dto.response.IntrospectResponse;
 import com.tuannv78.identity_service.model.service.AuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -40,4 +42,23 @@ public class AuthenticationController {
                 .result(result)
                 .build();
     }
+
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody RefreshRequest request)
+            throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> authenticate(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
+                .message("User had been logout")
+                .build();
+    }
+
 }

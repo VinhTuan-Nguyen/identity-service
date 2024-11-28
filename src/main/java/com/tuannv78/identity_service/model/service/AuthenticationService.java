@@ -5,13 +5,17 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.tuannv78.identity_service.dto.request.AuthenticationRequest;
-import com.tuannv78.identity_service.dto.request.IntrospectRequest;
-import com.tuannv78.identity_service.dto.response.AuthenticationResponse;
-import com.tuannv78.identity_service.dto.response.IntrospectResponse;
-import com.tuannv78.identity_service.entity.User;
-import com.tuannv78.identity_service.enums.ErrorCodeEnum;
-import com.tuannv78.identity_service.exception.AppException;
+import com.tuannv78.identity_service.common.dto.request.AuthenticationRequest;
+import com.tuannv78.identity_service.common.dto.request.IntrospectRequest;
+import com.tuannv78.identity_service.common.dto.request.LogoutRequest;
+import com.tuannv78.identity_service.common.dto.request.RefreshRequest;
+import com.tuannv78.identity_service.common.dto.response.AuthenticationResponse;
+import com.tuannv78.identity_service.common.dto.response.IntrospectResponse;
+import com.tuannv78.identity_service.common.entity.Token;
+import com.tuannv78.identity_service.common.entity.User;
+import com.tuannv78.identity_service.common.enums.ErrorCodeEnum;
+import com.tuannv78.identity_service.common.exception.AppException;
+import com.tuannv78.identity_service.model.repository.TokenRepository;
 import com.tuannv78.identity_service.model.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +33,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -37,25 +42,32 @@ import java.util.StringJoiner;
 public class AuthenticationService {
 
     UserRepository userRepository;
+    TokenRepository tokenRepository;
 
     @NonFinal
-    @Value("${jwt.signerKey}")
+    @Value("${jwt.signer-key}")
     protected String SIGNER_KEY;
 
-    public IntrospectResponse introspect(IntrospectRequest request)
-            throws JOSEException, ParseException {
+    @NonFinal
+    @Value("${jwt.valid-duration}")
+    protected long VALID_DURATION;
+
+    @NonFinal
+    @Value("${jwt.refreshable-duration}")
+    protected long REFRESHABLE_DURATION;
+
+    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
+        boolean isValid = true;
 
-        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
-
-        SignedJWT signedJWT = SignedJWT.parse(token);
-
-        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-
-        var verified = signedJWT.verify(verifier);
+        try {
+            verifyToken(token,false);
+        } catch (AppException e) {
+            isValid = false;
+        }
 
         return IntrospectResponse.builder()
-                .valid(verified && expiryTime.after(new Date()))
+                .valid(isValid)
                 .build();
     }
 
@@ -78,6 +90,73 @@ public class AuthenticationService {
                 .build();
     }
 
+    public void logout(LogoutRequest request) throws ParseException, JOSEException {
+        try {
+            var signToken = verifyToken(request.getToken(),true);
+
+            String jit = signToken.getJWTClaimsSet().getJWTID();
+            Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+
+            Token token = Token.builder()
+                    .id(jit)
+                    .expiryTime(expiryTime)
+                    .build();
+
+            tokenRepository.save(token);
+        } catch (AppException e) {
+            log.info("Token Expired");
+        }
+    }
+
+    public AuthenticationResponse refreshToken(RefreshRequest request)
+            throws ParseException, JOSEException {
+        var signedJWT = verifyToken(request.getToken(),true);
+
+        var jit = signedJWT.getJWTClaimsSet().getJWTID();
+
+        var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        Token token = Token.builder()
+                .id(jit)
+                .expiryTime(expiryTime)
+                .build();
+
+        tokenRepository.save(token);
+
+        var username = signedJWT.getJWTClaimsSet().getSubject();
+
+        var user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCodeEnum.UNAUTHENTICATED));
+
+        var generateToken = generateToken(user);
+
+        return AuthenticationResponse.builder()
+                .token(generateToken)
+                .authenticated(true)
+                .build();
+    }
+
+    private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
+
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        Date expiryTime = isRefresh
+                ? new Date(signedJWT.getJWTClaimsSet().getIssueTime().toInstant().plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli())
+                : signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        var verified = signedJWT.verify(verifier);
+
+        if (!(verified && expiryTime.after(new Date())))
+            throw new AppException(ErrorCodeEnum.UNAUTHENTICATED);
+
+        if (tokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+            throw new AppException(ErrorCodeEnum.UNAUTHENTICATED);
+
+        return signedJWT;
+    }
+
     private String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
@@ -87,8 +166,10 @@ public class AuthenticationService {
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(
-                                1,
-                                ChronoUnit.HOURS).toEpochMilli()))
+                                VALID_DURATION,
+                                ChronoUnit.SECONDS
+                        ).toEpochMilli()))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
 
@@ -110,7 +191,7 @@ public class AuthenticationService {
 
         if (!CollectionUtils.isEmpty(user.getRoles()))
             user.getRoles().forEach(role -> {
-                stringJoiner.add("ROLE_"+role.getName());
+                stringJoiner.add("ROLE_" + role.getName());
                 if (!CollectionUtils.isEmpty(role.getPermissions()))
                     role.getPermissions().forEach(permission -> {
                         stringJoiner.add(permission.getName());

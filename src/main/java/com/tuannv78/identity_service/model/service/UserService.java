@@ -1,20 +1,21 @@
 package com.tuannv78.identity_service.model.service;
 
-import com.tuannv78.identity_service.dto.request.UserCreationRequest;
-import com.tuannv78.identity_service.dto.request.UserUpdateRequest;
-import com.tuannv78.identity_service.dto.response.UserResponse;
-import com.tuannv78.identity_service.entity.Role;
-import com.tuannv78.identity_service.entity.User;
-import com.tuannv78.identity_service.enums.ErrorCodeEnum;
-import com.tuannv78.identity_service.enums.RoleEnum;
-import com.tuannv78.identity_service.exception.AppException;
-import com.tuannv78.identity_service.mapper.UserMapper;
+import com.tuannv78.identity_service.common.dto.request.UserCreationRequest;
+import com.tuannv78.identity_service.common.dto.request.UserUpdateRequest;
+import com.tuannv78.identity_service.common.dto.response.UserResponse;
+import com.tuannv78.identity_service.common.entity.Role;
+import com.tuannv78.identity_service.common.entity.User;
+import com.tuannv78.identity_service.common.enums.ErrorCodeEnum;
+import com.tuannv78.identity_service.common.enums.RoleEnum;
+import com.tuannv78.identity_service.common.exception.AppException;
+import com.tuannv78.identity_service.common.mapper.UserMapper;
 import com.tuannv78.identity_service.model.repository.RoleRepository;
 import com.tuannv78.identity_service.model.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,7 +47,12 @@ public class UserService {
                 .name(RoleEnum.USER.name())
                 .build());
         user.setRoles(roles);
-        return userMapper.toUserResponse(userRepository.save(user));
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCodeEnum.USER_EXISTED);
+        }
+        return userMapper.toUserResponse(user);
     }
 
     public UserResponse updateUser(String userId, UserUpdateRequest request) {

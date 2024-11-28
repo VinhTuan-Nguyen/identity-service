@@ -1,15 +1,14 @@
 package com.tuannv78.identity_service.controller;
 
-import com.tuannv78.identity_service.dto.ApiResponse;
-import com.tuannv78.identity_service.dto.request.PermissionRequest;
-import com.tuannv78.identity_service.dto.response.PermissionResponse;
-import com.tuannv78.identity_service.enums.PermissionEnum;
+import com.tuannv78.identity_service.common.dto.ApiResponse;
+import com.tuannv78.identity_service.common.dto.request.PermissionRequest;
+import com.tuannv78.identity_service.common.dto.response.PermissionResponse;
+import com.tuannv78.identity_service.common.enums.PermissionEnum;
 import com.tuannv78.identity_service.model.service.PermissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

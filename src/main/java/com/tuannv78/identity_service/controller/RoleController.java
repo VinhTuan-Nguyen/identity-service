@@ -1,13 +1,9 @@
 package com.tuannv78.identity_service.controller;
 
-import com.tuannv78.identity_service.dto.ApiResponse;
-import com.tuannv78.identity_service.dto.request.PermissionRequest;
-import com.tuannv78.identity_service.dto.request.RoleRequest;
-import com.tuannv78.identity_service.dto.response.PermissionResponse;
-import com.tuannv78.identity_service.dto.response.RoleResponse;
-import com.tuannv78.identity_service.entity.Role;
-import com.tuannv78.identity_service.enums.RoleEnum;
-import com.tuannv78.identity_service.model.service.PermissionService;
+import com.tuannv78.identity_service.common.dto.ApiResponse;
+import com.tuannv78.identity_service.common.dto.request.RoleRequest;
+import com.tuannv78.identity_service.common.dto.response.RoleResponse;
+import com.tuannv78.identity_service.common.enums.RoleEnum;
 import com.tuannv78.identity_service.model.service.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

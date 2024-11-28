@@ -1,10 +1,9 @@
 package com.tuannv78.identity_service.controller;
 
-import com.tuannv78.identity_service.dto.ApiResponse;
-import com.tuannv78.identity_service.dto.request.UserCreationRequest;
-import com.tuannv78.identity_service.dto.request.UserUpdateRequest;
-import com.tuannv78.identity_service.dto.response.UserResponse;
-import com.tuannv78.identity_service.entity.User;
+import com.tuannv78.identity_service.common.dto.ApiResponse;
+import com.tuannv78.identity_service.common.dto.request.UserCreationRequest;
+import com.tuannv78.identity_service.common.dto.request.UserUpdateRequest;
+import com.tuannv78.identity_service.common.dto.response.UserResponse;
 import com.tuannv78.identity_service.model.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
