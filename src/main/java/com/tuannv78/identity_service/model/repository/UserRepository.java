@@ -1,6 +1,6 @@
 package com.tuannv78.identity_service.model.repository;
 
-import com.tuannv78.identity_service.entity.User;
+import com.tuannv78.identity_service.common.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

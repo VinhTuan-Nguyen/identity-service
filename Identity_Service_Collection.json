@@ -1,0 +1,674 @@
+{
+	"info": {
+		"_postman_id": "0c89a458-eb9f-4624-8b3a-30a95dc4edcb",
+		"name": "Identity Service Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20941400"
+	},
+	"item": [
+		{
+			"name": "Authentication API",
+			"item": [
+				{
+					"name": "Get JWT Token",
+					"item": [
+						{
+							"name": "For Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var token = pm.response.json().result.token;\r",
+											"pm.collectionVariables.set(\"auth-token\", token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}{{path}}",
+									"host": [
+										"{{baseUrl}}{{path}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "For User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if(Boolean(pm.response.json().result?.token)) {\r",
+											"    pm.collectionVariables.set(\r",
+											"        \"auth-token\",\r",
+											"        pm.response.json().result.token\r",
+											"    )\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"vinhtuan3\",\r\n    \"password\": \"13245678\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}{{path}}",
+									"host": [
+										"{{baseUrl}}{{path}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									"pm.variables.set(\"path\", `/auth/token`)"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Verifying Current User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"path\", `/auth/introspect`)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{auth-token}}\"\r\n    //\"token\": \"eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJsb2NhbGhvc3QuY29tIiwic3ViIjoidmluaHR1YW4zIiwiZXhwIjoxNzMyNTMxNjMwLCJpYXQiOjE3MzI1MjgwMzAsInNjb3BlIjoiIn0.S17gIr93d7xFhbWn2S4jA2akJCwCPyRPkRihOjWwqyct9msoTbMmkSMXTaep9U1wjrNgoN3OQSbCUSyEgqPtTA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{path}}",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.variables.set(\"path\", `/auth`)"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "User API",
+			"item": [
+				{
+					"name": "Getting All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{path}}",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Getting User By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{path}}/11eeeedf-ff8c-498e-a3b3-abda93bc4c34",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							],
+							"path": [
+								"11eeeedf-ff8c-498e-a3b3-abda93bc4c34"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Current User Info",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"path\", `/users/my-info`)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{path}}",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creating New User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"vinhtuan3\",\r\n    \"password\": \"13245678\",\r\n    \"firstName\": \"Nguyễn Vĩnh\",\r\n    \"lastName\": \"Tuân\",\r\n    \"dob\": \"2023-06-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{path}}",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updating User By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"132456784\",\r\n    \"firstName\": \"Nguyễn Vĩnh\",\r\n    \"lastName\": \"Tuân\",\r\n    \"dob\": \"1997-06-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{path}}/2b1208c7-53d2-4c40-96dd-b5e237c5f818",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							],
+							"path": [
+								"2b1208c7-53d2-4c40-96dd-b5e237c5f818"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting User By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{path}}/4f9bc3db-d8b3-4730-bacc-24488004ef26",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							],
+							"path": [
+								"4f9bc3db-d8b3-4730-bacc-24488004ef26"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.variables.set(\"path\", `/users`)"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Role API",
+			"item": [
+				{
+					"name": "Getting All Roles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{path}}",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creating New Role",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"ADMIN\",\r\n    \"description\": \"Admin Role\",\r\n    \"permissions\": [\"REJECT_POST\", \"CREATE_POST\", \"APPROVE_POST\"]\r\n}\r\n// {\r\n//     \"name\": \"USER1\",\r\n//     \"description\": \"User Role\",\r\n//     \"permissions\": [\"CREATE_POST\"]\r\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{path}}",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting Role",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{path}}/HAHAH",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							],
+							"path": [
+								"HAHAH"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.variables.set(\"path\", \"/roles\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Permission API",
+			"item": [
+				{
+					"name": "Getting All Permissions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{path}}",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creating New Permission",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"CREATE_POST\",\r\n    \"description\": \"Create a post\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{path}}",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting Permission",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{path}}/UPDATE_DATA",
+							"host": [
+								"{{baseUrl}}{{path}}"
+							],
+							"path": [
+								"UPDATE_DATA"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.variables.set(\"path\", \"/permissions\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "localhost:8080/identity"
+		},
+		{
+			"key": "auth-token",
+			"value": "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJsb2NhbGhvc3QuY29tIiwic3ViIjoiYWRtaW4iLCJleHAiOjE3MzI1Mjg0NTMsImlhdCI6MTczMjUyNDg1Mywic2NvcGUiOiJBRE1JTiJ9.CoQfnAeYvhyN3cUZFAtcZLXeg4_dfM-Dr1uIFsNHHMHsOlm2-GIlvxJu_iFg5G3elLZx1nGnvY0ijRub8iwVtw",
+			"type": "string"
+		}
+	]
+}
