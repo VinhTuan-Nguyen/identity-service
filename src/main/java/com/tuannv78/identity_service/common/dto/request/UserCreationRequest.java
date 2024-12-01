@@ -1,6 +1,6 @@
 package com.tuannv78.identity_service.common.dto.request;
 
-import com.tuannv78.identity_service.common.validator.DobConstraint;
+import com.tuannv78.identity_service.common.annotations.DobConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

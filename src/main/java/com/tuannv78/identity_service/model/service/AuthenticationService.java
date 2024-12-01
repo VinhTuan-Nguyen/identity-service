@@ -49,27 +49,16 @@ public class AuthenticationService {
     protected String SIGNER_KEY;
 
     @NonFinal
+    @Value("${jwt.issuer}")
+    protected String ISSUER;
+
+    @NonFinal
     @Value("${jwt.valid-duration}")
     protected long VALID_DURATION;
 
     @NonFinal
     @Value("${jwt.refreshable-duration}")
     protected long REFRESHABLE_DURATION;
-
-    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
-        var token = request.getToken();
-        boolean isValid = true;
-
-        try {
-            verifyToken(token,false);
-        } catch (AppException e) {
-            isValid = false;
-        }
-
-        return IntrospectResponse.builder()
-                .valid(isValid)
-                .build();
-    }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         var user = userRepository.findByUsername(request.getUsername())
@@ -90,27 +79,23 @@ public class AuthenticationService {
                 .build();
     }
 
-    public void logout(LogoutRequest request) throws ParseException, JOSEException {
+    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
+        var token = request.getToken();
+        boolean isValid = true;
+
         try {
-            var signToken = verifyToken(request.getToken(),true);
-
-            String jit = signToken.getJWTClaimsSet().getJWTID();
-            Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
-
-            Token token = Token.builder()
-                    .id(jit)
-                    .expiryTime(expiryTime)
-                    .build();
-
-            tokenRepository.save(token);
+            verifyToken(token, false);
         } catch (AppException e) {
-            log.info("Token Expired");
+            isValid = false;
         }
+
+        return IntrospectResponse.builder()
+                .valid(isValid)
+                .build();
     }
 
-    public AuthenticationResponse refreshToken(RefreshRequest request)
-            throws ParseException, JOSEException {
-        var signedJWT = verifyToken(request.getToken(),true);
+    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
+        var signedJWT = verifyToken(request.getToken(), true);
 
         var jit = signedJWT.getJWTClaimsSet().getJWTID();
 
@@ -134,6 +119,25 @@ public class AuthenticationService {
                 .token(generateToken)
                 .authenticated(true)
                 .build();
+    }
+
+    public void logout(LogoutRequest request) throws ParseException, JOSEException {
+        log.info("Start Logout User");
+        try {
+            var signToken = verifyToken(request.getToken(), true);
+
+            String jit = signToken.getJWTClaimsSet().getJWTID();
+            Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+
+            Token token = Token.builder()
+                    .id(jit)
+                    .expiryTime(expiryTime)
+                    .build();
+
+            tokenRepository.save(token);
+        } catch (AppException e) {
+            log.info("Token Expired");
+        }
     }
 
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
@@ -162,7 +166,7 @@ public class AuthenticationService {
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
-                .issuer("localhost.com")
+                .issuer(ISSUER)
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(
@@ -181,7 +185,7 @@ public class AuthenticationService {
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
-            log.error("Cannot create token", e);
+            log.error("Cannot create token: ", e);
             throw new RuntimeException(e);
         }
     }

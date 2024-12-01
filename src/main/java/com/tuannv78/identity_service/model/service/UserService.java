@@ -36,7 +36,7 @@ public class UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
-    public UserResponse createUser(UserCreationRequest request) {
+    public UserResponse create(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCodeEnum.USER_EXISTED);
 
@@ -55,7 +55,7 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    public UserResponse updateUser(String userId, UserUpdateRequest request) {
+    public UserResponse update(String userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User Not Found"));
 
@@ -70,7 +70,7 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    public void deleteUser(String userId) {
+    public void delete(String userId) {
         userRepository.deleteById(userId);
     }
 
@@ -81,14 +81,14 @@ public class UserService {
     }
 
     @PostAuthorize("returnObject.username == authentication.name || returnObject.username == 'admin'")
-    public UserResponse getUser(String id) {
+    public UserResponse getUserByID(String id) {
         log.info("In method get User by ID");
         return userMapper.toUserResponse(userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User Not Found"))
         );
     }
 
-    public UserResponse getMyInfo() {
+    public UserResponse myInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
         User user = userRepository.findByUsername(name).orElseThrow(

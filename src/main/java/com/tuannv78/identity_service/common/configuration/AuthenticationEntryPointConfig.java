@@ -1,7 +1,7 @@
 package com.tuannv78.identity_service.common.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tuannv78.identity_service.common.dto.ApiResponse;
+import com.tuannv78.identity_service.common.dto.response.ApiResponse;
 import com.tuannv78.identity_service.common.enums.ErrorCodeEnum;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

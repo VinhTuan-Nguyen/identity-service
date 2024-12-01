@@ -30,7 +30,6 @@ public class ApplicationInitConfig {
                 var roles = new HashSet<Role>();
                 roles.add(Role.builder().name(RoleEnum.ADMIN.name()).build());
 
-                new User();
                 User user = User.builder().username("admin").password(passwordEncoder.encode("admin")).roles(roles).build();
                 userRepository.save(user);
                 log.warn("\n\nAdmin user has been created by default with the following information:\nUsername: admin\nPassword: admin");

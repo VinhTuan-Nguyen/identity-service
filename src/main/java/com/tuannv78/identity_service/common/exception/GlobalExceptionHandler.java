@@ -1,6 +1,6 @@
 package com.tuannv78.identity_service.common.exception;
 
-import com.tuannv78.identity_service.common.dto.ApiResponse;
+import com.tuannv78.identity_service.common.dto.response.ApiResponse;
 import com.tuannv78.identity_service.common.enums.ErrorCodeEnum;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<ApiResponse<Void>> handlingValidation(MethodArgumentNotValidException exception) {
+    ResponseEntity<ApiResponse<Void>> handlingMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         log.error(exception.getMessage());
         String enumKey = exception.getFieldError().getDefaultMessage();
         ErrorCodeEnum errorCode = ErrorCodeEnum.INVALID_KEY;
@@ -61,8 +61,7 @@ public class GlobalExceptionHandler {
                     .getAllErrors().getFirst().unwrap(ConstraintViolation.class);
             attributes = constraintViolation.getConstraintDescriptor().getAttributes();
             log.info(attributes.toString());
-        } catch (IllegalArgumentException e) {
-        }
+        } catch (IllegalArgumentException e) {}
 
         return ResponseEntity
                 .badRequest()
