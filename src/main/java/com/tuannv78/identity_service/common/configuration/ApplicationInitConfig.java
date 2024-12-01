@@ -15,24 +15,35 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Slf4j
 public class ApplicationInitConfig {
 
+    static String INIT_USERNAME = "admin";
+    static String INIT_PASSWORD = "admin";
     PasswordEncoder passwordEncoder;
 
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
-            if (userRepository.findByUsername("admin").isEmpty()) {
+            if (userRepository.findByUsername(INIT_USERNAME).isEmpty()) {
                 var roles = new HashSet<Role>();
                 roles.add(Role.builder().name(RoleEnum.ADMIN.name()).build());
 
-                User user = User.builder().username("admin").password(passwordEncoder.encode("admin")).roles(roles).build();
+                User user = User.builder()
+                        .username(INIT_USERNAME)
+                        .password(passwordEncoder.encode(INIT_PASSWORD))
+                        .roles(roles)
+                        .build();
+
                 userRepository.save(user);
-                log.warn("\n\nAdmin user has been created by default with the following information:\nUsername: admin\nPassword: admin");
+
+                log.warn("\nAdmin user has been created by default with the following information:\nUsername: {}\nPassword: {}",
+                        INIT_USERNAME,
+                        INIT_PASSWORD
+                );
             }
         };
     }
