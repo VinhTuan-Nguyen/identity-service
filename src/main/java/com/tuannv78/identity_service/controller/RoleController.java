@@ -4,7 +4,7 @@ import com.tuannv78.identity_service.common.dto.response.ApiResponse;
 import com.tuannv78.identity_service.common.dto.request.RoleRequest;
 import com.tuannv78.identity_service.common.dto.response.RoleResponse;
 import com.tuannv78.identity_service.common.enums.RoleEnum;
-import com.tuannv78.identity_service.model.service.RoleService;
+import com.tuannv78.identity_service.service.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

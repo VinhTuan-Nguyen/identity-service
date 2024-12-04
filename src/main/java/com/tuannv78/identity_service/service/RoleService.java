@@ -1,11 +1,11 @@
-package com.tuannv78.identity_service.model.service;
+package com.tuannv78.identity_service.service;
 
 import com.tuannv78.identity_service.common.dto.request.RoleRequest;
 import com.tuannv78.identity_service.common.dto.response.RoleResponse;
 import com.tuannv78.identity_service.common.enums.RoleEnum;
 import com.tuannv78.identity_service.common.mapper.RoleMapper;
-import com.tuannv78.identity_service.model.repository.PermissionRepository;
-import com.tuannv78.identity_service.model.repository.RoleRepository;
+import com.tuannv78.repository.PermissionRepository;
+import com.tuannv78.repository.RoleRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

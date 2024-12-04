@@ -1,4 +1,4 @@
-package com.tuannv78.identity_service.model.service;
+package com.tuannv78.identity_service.service;
 
 import com.tuannv78.identity_service.common.dto.request.UserCreationRequest;
 import com.tuannv78.identity_service.common.dto.request.UserUpdateRequest;
@@ -9,8 +9,8 @@ import com.tuannv78.identity_service.common.enums.ErrorCodeEnum;
 import com.tuannv78.identity_service.common.enums.RoleEnum;
 import com.tuannv78.identity_service.common.exception.AppException;
 import com.tuannv78.identity_service.common.mapper.UserMapper;
-import com.tuannv78.identity_service.model.repository.RoleRepository;
-import com.tuannv78.identity_service.model.repository.UserRepository;
+import com.tuannv78.repository.RoleRepository;
+import com.tuannv78.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

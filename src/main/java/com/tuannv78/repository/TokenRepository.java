@@ -1,4 +1,4 @@
-package com.tuannv78.identity_service.model.repository;
+package com.tuannv78.repository;
 
 import com.tuannv78.identity_service.common.entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;

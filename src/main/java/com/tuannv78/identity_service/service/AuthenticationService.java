@@ -1,4 +1,4 @@
-package com.tuannv78.identity_service.model.service;
+package com.tuannv78.identity_service.service;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -15,8 +15,8 @@ import com.tuannv78.identity_service.common.entity.Token;
 import com.tuannv78.identity_service.common.entity.User;
 import com.tuannv78.identity_service.common.enums.ErrorCodeEnum;
 import com.tuannv78.identity_service.common.exception.AppException;
-import com.tuannv78.identity_service.model.repository.TokenRepository;
-import com.tuannv78.identity_service.model.repository.UserRepository;
+import com.tuannv78.repository.TokenRepository;
+import com.tuannv78.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

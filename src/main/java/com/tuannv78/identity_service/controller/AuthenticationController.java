@@ -8,7 +8,7 @@ import com.tuannv78.identity_service.common.dto.request.LogoutRequest;
 import com.tuannv78.identity_service.common.dto.request.RefreshRequest;
 import com.tuannv78.identity_service.common.dto.response.AuthenticationResponse;
 import com.tuannv78.identity_service.common.dto.response.IntrospectResponse;
-import com.tuannv78.identity_service.model.service.AuthenticationService;
+import com.tuannv78.identity_service.service.AuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

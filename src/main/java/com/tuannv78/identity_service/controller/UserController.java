@@ -4,7 +4,7 @@ import com.tuannv78.identity_service.common.dto.response.ApiResponse;
 import com.tuannv78.identity_service.common.dto.request.UserCreationRequest;
 import com.tuannv78.identity_service.common.dto.request.UserUpdateRequest;
 import com.tuannv78.identity_service.common.dto.response.UserResponse;
-import com.tuannv78.identity_service.model.service.UserService;
+import com.tuannv78.identity_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

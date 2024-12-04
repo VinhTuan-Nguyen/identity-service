@@ -1,4 +1,4 @@
-package com.tuannv78.identity_service.model.repository;
+package com.tuannv78.repository;
 
 import com.tuannv78.identity_service.common.entity.Role;
 import com.tuannv78.identity_service.common.enums.RoleEnum;

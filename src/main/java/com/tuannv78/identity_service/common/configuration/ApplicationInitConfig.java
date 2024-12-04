@@ -3,7 +3,7 @@ package com.tuannv78.identity_service.common.configuration;
 import com.tuannv78.identity_service.common.entity.Role;
 import com.tuannv78.identity_service.common.entity.User;
 import com.tuannv78.identity_service.common.enums.RoleEnum;
-import com.tuannv78.identity_service.model.repository.UserRepository;
+import com.tuannv78.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

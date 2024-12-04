@@ -4,7 +4,7 @@ import com.tuannv78.identity_service.common.dto.response.ApiResponse;
 import com.tuannv78.identity_service.common.dto.request.PermissionRequest;
 import com.tuannv78.identity_service.common.dto.response.PermissionResponse;
 import com.tuannv78.identity_service.common.enums.PermissionEnum;
-import com.tuannv78.identity_service.model.service.PermissionService;
+import com.tuannv78.identity_service.service.PermissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
