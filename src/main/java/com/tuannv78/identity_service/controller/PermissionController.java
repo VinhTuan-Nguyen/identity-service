@@ -1,10 +1,10 @@
 package com.tuannv78.identity_service.controller;
 
-import com.tuannv78.identity_service.common.dto.ApiResponse;
+import com.tuannv78.identity_service.common.dto.response.ApiResponse;
 import com.tuannv78.identity_service.common.dto.request.PermissionRequest;
 import com.tuannv78.identity_service.common.dto.response.PermissionResponse;
 import com.tuannv78.identity_service.common.enums.PermissionEnum;
-import com.tuannv78.identity_service.model.service.PermissionService;
+import com.tuannv78.identity_service.service.PermissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,17 +21,17 @@ import java.util.List;
 public class PermissionController {
     PermissionService permissionService;
 
-    @PostMapping
-    ApiResponse<PermissionResponse> create(@RequestBody PermissionRequest request) {
-        return ApiResponse.<PermissionResponse>builder()
-                .result(permissionService.create(request))
-                .build();
-    }
-
     @GetMapping
     ApiResponse<List<PermissionResponse>> getAll() {
         return ApiResponse.<List<PermissionResponse>>builder()
                 .result(permissionService.getAll())
+                .build();
+    }
+
+    @PostMapping
+    ApiResponse<PermissionResponse> create(@RequestBody PermissionRequest request) {
+        return ApiResponse.<PermissionResponse>builder()
+                .result(permissionService.create(request))
                 .build();
     }
 

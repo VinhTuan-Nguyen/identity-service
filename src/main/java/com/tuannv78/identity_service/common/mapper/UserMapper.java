@@ -3,7 +3,7 @@ package com.tuannv78.identity_service.common.mapper;
 import com.tuannv78.identity_service.common.dto.request.UserCreationRequest;
 import com.tuannv78.identity_service.common.dto.request.UserUpdateRequest;
 import com.tuannv78.identity_service.common.dto.response.UserResponse;
-import com.tuannv78.identity_service.common.entity.User;
+import com.tuannv78.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

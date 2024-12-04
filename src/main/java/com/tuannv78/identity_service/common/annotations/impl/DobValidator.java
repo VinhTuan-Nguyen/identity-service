@@ -1,5 +1,6 @@
-package com.tuannv78.identity_service.common.validator;
+package com.tuannv78.identity_service.common.annotations.impl;
 
+import com.tuannv78.identity_service.common.annotations.DobConstraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

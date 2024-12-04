@@ -1,10 +1,10 @@
 package com.tuannv78.identity_service.controller;
 
-import com.tuannv78.identity_service.common.dto.ApiResponse;
+import com.tuannv78.identity_service.common.dto.response.ApiResponse;
 import com.tuannv78.identity_service.common.dto.request.RoleRequest;
 import com.tuannv78.identity_service.common.dto.response.RoleResponse;
 import com.tuannv78.identity_service.common.enums.RoleEnum;
-import com.tuannv78.identity_service.model.service.RoleService;
+import com.tuannv78.identity_service.service.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,17 +21,17 @@ import java.util.List;
 public class RoleController {
     RoleService roleService;
 
-    @PostMapping
-    ApiResponse<RoleResponse> create(@RequestBody RoleRequest request) {
-        return ApiResponse.<RoleResponse>builder()
-                .result(roleService.create(request))
-                .build();
-    }
-
     @GetMapping
     ApiResponse<List<RoleResponse>> getAll() {
         return ApiResponse.<List<RoleResponse>>builder()
                 .result(roleService.getAll())
+                .build();
+    }
+
+    @PostMapping
+    ApiResponse<RoleResponse> create(@RequestBody RoleRequest request) {
+        return ApiResponse.<RoleResponse>builder()
+                .result(roleService.create(request))
                 .build();
     }
 

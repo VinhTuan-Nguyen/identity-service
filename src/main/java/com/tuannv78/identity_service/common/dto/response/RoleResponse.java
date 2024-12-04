@@ -1,6 +1,6 @@
 package com.tuannv78.identity_service.common.dto.response;
 
-import com.tuannv78.identity_service.common.entity.Permission;
+import com.tuannv78.entity.Permission;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
