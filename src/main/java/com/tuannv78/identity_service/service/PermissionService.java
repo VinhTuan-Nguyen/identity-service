@@ -2,7 +2,7 @@ package com.tuannv78.identity_service.service;
 
 import com.tuannv78.identity_service.common.dto.request.PermissionRequest;
 import com.tuannv78.identity_service.common.dto.response.PermissionResponse;
-import com.tuannv78.identity_service.common.entity.Permission;
+import com.tuannv78.entity.Permission;
 import com.tuannv78.identity_service.common.enums.PermissionEnum;
 import com.tuannv78.identity_service.common.mapper.PermissionMapper;
 import com.tuannv78.repository.PermissionRepository;

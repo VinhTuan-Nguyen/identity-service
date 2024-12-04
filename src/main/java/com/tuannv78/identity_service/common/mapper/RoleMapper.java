@@ -2,7 +2,7 @@ package com.tuannv78.identity_service.common.mapper;
 
 import com.tuannv78.identity_service.common.dto.request.RoleRequest;
 import com.tuannv78.identity_service.common.dto.response.RoleResponse;
-import com.tuannv78.identity_service.common.entity.Role;
+import com.tuannv78.entity.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

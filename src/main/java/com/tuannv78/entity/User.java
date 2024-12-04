@@ -1,4 +1,4 @@
-package com.tuannv78.identity_service.common.entity;
+package com.tuannv78.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

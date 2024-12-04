@@ -1,7 +1,7 @@
 package com.tuannv78.identity_service.common.configuration;
 
-import com.tuannv78.identity_service.common.entity.Role;
-import com.tuannv78.identity_service.common.entity.User;
+import com.tuannv78.entity.Role;
+import com.tuannv78.entity.User;
 import com.tuannv78.identity_service.common.enums.RoleEnum;
 import com.tuannv78.repository.UserRepository;
 import lombok.AccessLevel;
