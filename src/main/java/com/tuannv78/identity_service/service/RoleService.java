@@ -20,9 +20,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoleService {
-    private final PermissionRepository permissionRepository;
+    PermissionRepository permissionRepository;
     RoleRepository roleRepository;
     RoleMapper roleMapper;
+
+    public List<RoleResponse> getAll() {
+        return roleRepository.findAll()
+                .stream()
+                .map(roleMapper::toRoleResponse)
+                .toList();
+    }
 
     public RoleResponse create(RoleRequest request) {
         var role = roleMapper.toRole(request);
@@ -32,14 +39,7 @@ public class RoleService {
         return roleMapper.toRoleResponse(role);
     }
 
-    public List<RoleResponse> getAll() {
-        return roleRepository.findAll()
-                .stream()
-                .map(roleMapper::toRoleResponse)
-                .toList();
-    }
-
-    public void delete(RoleEnum role) {
+    public void delete(String role) {
         roleRepository.deleteById(role);
     }
 }

@@ -9,6 +9,11 @@ spring:
   application:
     # ${spring.application.name}
     name: "identity-service"
+    init-user:
+      # ${spring.application.init-user.username}
+      username: "admin"
+      # ${spring.application.init-user.password}
+      password: "admin"
   datasource:
     # ${spring.datasource.url}
     url: "jdbc:mysql://localhost:3306/identity_service"
@@ -21,7 +26,7 @@ spring:
       # ${spring.jpa.hibernate.ddl-auto}
       ddl-auto: update
     # ${spring.jpa.show-sql}
-    show-sql: true
+    show-sql: false
 
 jwt:
   # ${jwt.signer-key}

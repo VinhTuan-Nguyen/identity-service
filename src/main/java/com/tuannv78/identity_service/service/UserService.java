@@ -1,10 +1,10 @@
 package com.tuannv78.identity_service.service;
 
+import com.tuannv78.entity.Role;
+import com.tuannv78.entity.User;
 import com.tuannv78.identity_service.common.dto.request.UserCreationRequest;
 import com.tuannv78.identity_service.common.dto.request.UserUpdateRequest;
 import com.tuannv78.identity_service.common.dto.response.UserResponse;
-import com.tuannv78.entity.Role;
-import com.tuannv78.entity.User;
 import com.tuannv78.identity_service.common.enums.ErrorCodeEnum;
 import com.tuannv78.identity_service.common.enums.RoleEnum;
 import com.tuannv78.identity_service.common.exception.AppException;
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Slf4j
@@ -36,21 +37,27 @@ public class UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getAll() {
+        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
+    }
+
     public UserResponse create(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCodeEnum.USER_EXISTED);
 
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        var roles = new HashSet<Role>();
+        Set<Role> roles = new HashSet<>();
         roles.add(Role.builder()
                 .name(RoleEnum.USER.name())
+                .description(RoleEnum.USER.getDescription())
                 .build());
         user.setRoles(roles);
         try {
             userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
-            throw new AppException(ErrorCodeEnum.USER_EXISTED);
+            throw new RuntimeException(e);
         }
         return userMapper.toUserResponse(user);
     }
@@ -72,12 +79,6 @@ public class UserService {
 
     public void delete(String userId) {
         userRepository.deleteById(userId);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponse> getUsers() {
-        log.info("In method get Users");
-        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
 
     @PostAuthorize("returnObject.username == authentication.name || returnObject.username == 'admin'")

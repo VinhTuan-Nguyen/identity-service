@@ -1,8 +1,8 @@
 package com.tuannv78.identity_service.controller;
 
-import com.tuannv78.identity_service.common.dto.response.ApiResponse;
 import com.tuannv78.identity_service.common.dto.request.UserCreationRequest;
 import com.tuannv78.identity_service.common.dto.request.UserUpdateRequest;
+import com.tuannv78.identity_service.common.dto.response.ApiResponse;
 import com.tuannv78.identity_service.common.dto.response.UserResponse;
 import com.tuannv78.identity_service.service.UserService;
 import jakarta.validation.Valid;
@@ -27,12 +27,12 @@ public class UserController {
     ApiResponse<List<UserResponse>> getAll() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        authentication.getAuthorities().forEach(
-                grantedAuthority -> log.info(grantedAuthority.getAuthority())
+        authentication.getAuthorities().forEach(grantedAuthority ->
+                log.info("Authorization: : {}", grantedAuthority.getAuthority())
         );
 
         return ApiResponse.<List<UserResponse>>builder()
-                .result(userService.getUsers())
+                .result(userService.getAll())
                 .build();
     }
 
