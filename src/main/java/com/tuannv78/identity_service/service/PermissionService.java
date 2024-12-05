@@ -1,9 +1,10 @@
 package com.tuannv78.identity_service.service;
 
+import com.tuannv78.entity.Permission;
 import com.tuannv78.identity_service.common.dto.request.PermissionRequest;
 import com.tuannv78.identity_service.common.dto.response.PermissionResponse;
-import com.tuannv78.entity.Permission;
-import com.tuannv78.identity_service.common.enums.PermissionEnum;
+import com.tuannv78.identity_service.common.enums.ErrorCodeEnum;
+import com.tuannv78.identity_service.common.exception.AppException;
 import com.tuannv78.identity_service.common.mapper.PermissionMapper;
 import com.tuannv78.repository.PermissionRepository;
 import lombok.AccessLevel;
@@ -23,14 +24,46 @@ public class PermissionService {
     PermissionMapper permissionMapper;
 
     public List<PermissionResponse> getAll() {
-        return permissionRepository.findAll().stream()
-                .map(permissionMapper::toPermissionResponse).toList();
+        // Getting all permissions in database
+        return permissionRepository.findAll()
+                .stream()
+                // transform for each row data into DTO list
+                .map(permissionMapper::toPermissionResponse)
+                .toList();
     }
 
     public PermissionResponse create(PermissionRequest request) {
-        Permission permission = permissionMapper.toPermission(request);
-        permission = permissionRepository.save(permission);
-        return permissionMapper.toPermissionResponse(permission);
+        // Step 1: Verify whether the permission exists in the Database
+        if (permissionRepository.existsById(request.getName()))
+            // Throw exception when the permission already exists
+            throw new AppException(ErrorCodeEnum.PERMISSION_EXISTED);
+
+        // Finnaly: Return permission response
+        return permissionMapper.toPermissionResponse(
+                // Save permission into the database
+                permissionRepository.save(
+                        // Mapping DTO -> Entity
+                        permissionMapper.toPermission(request)
+                )
+        );
+    }
+
+    public PermissionResponse updateDescription(String name) {
+        // Step 1: Verify whether the permission exists in the Database
+        Permission permission = permissionRepository.findById(name)
+                // Throw exception when the permission does not exist
+                .orElseThrow(() -> new AppException(ErrorCodeEnum.PERMISSION_NOT_EXISTED));
+
+        // Step 2: Mapping new value
+        if (name != null && !name.isBlank())
+            permission.setDescription(name);
+
+        // Finnaly: Return permission response
+        return permissionMapper.toPermissionResponse(
+                // Save permission into the database
+                permissionRepository.save(permission)
+        );
+
     }
 
     public void delete(String permission) {

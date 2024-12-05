@@ -15,7 +15,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,70 +38,101 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAll() {
-        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
+        // Getting all permissions in database
+        return userRepository.findAll()
+                .stream()
+                // transform for each row data into DTO list
+                .map(userMapper::toUserResponse)
+                .toList();
+    }
+
+    @PostAuthorize("returnObject.username == authentication.name || returnObject.username == 'admin'")
+    public UserResponse getUserByID(String id) {
+        // Step 1: Verify whether the user exists in the Database
+        User user = userRepository.findById(id)
+                // Throw exception when the user doesn't exist
+                .orElseThrow(() -> new AppException(ErrorCodeEnum.USER_NOT_EXISTED));
+
+        // Finally: return user response
+        return userMapper.toUserResponse(user);
+    }
+
+    public UserResponse myInfo() {
+        // Step 1: Get username form JWT token context
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Step 2: Verify whether the user exists in the Database
+        User user = userRepository.findByUsername(username)
+                // Throw exception when the user doesn't exist
+                .orElseThrow(() -> new AppException(ErrorCodeEnum.USER_NOT_EXISTED));
+
+        // Finally: return user response
+        return userMapper.toUserResponse(user);
     }
 
     public UserResponse create(UserCreationRequest request) {
+        // Step 1: Verify whether the user exists in the Database
         if (userRepository.existsByUsername(request.getUsername()))
+            // Throw exception when the user already exists
             throw new AppException(ErrorCodeEnum.USER_EXISTED);
 
+        // Step 2: Mapping DTO -> Entity
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        // Step 3: Add role default
         Set<Role> roles = new HashSet<>();
         roles.add(Role.builder()
                 .name(RoleEnum.USER.name())
                 .description(RoleEnum.USER.getDescription())
                 .build());
         user.setRoles(roles);
-        try {
-            userRepository.save(user);
-        } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException(e);
-        }
-        return userMapper.toUserResponse(user);
+
+        // Finally: Return user response
+        return userMapper.toUserResponse(
+                // Save user into the database
+                userRepository.save(user)
+        );
     }
 
+    @PostAuthorize("returnObject.username == authentication.name || returnObject.username == 'admin'")
     public UserResponse update(String userId, UserUpdateRequest request) {
+        // Step 1: Verify whether the user exists in the Database
         User user = userRepository.findById(userId)
+                // Throw exception when the user doesn't exist
                 .orElseThrow(() -> new AppException(ErrorCodeEnum.USER_NOT_EXISTED));
 
-        // Check password
+        // Step 2: Check password
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
-        if(request.getFirstName() != null && !request.getFirstName().isEmpty())
+        // Step 3: Check first name
+        if (request.getFirstName() != null && !request.getFirstName().isEmpty())
             user.setFirstName(request.getFirstName());
 
-        if(request.getLastName() != null && !request.getLastName().isEmpty())
+        // Step 4: Check last name
+        if (request.getLastName() != null && !request.getLastName().isEmpty())
             user.setFirstName(request.getLastName());
 
-        if(request.getDob() != null)
+        // Step 5: Check date of birth
+        if (request.getDob() != null)
             user.setDob(request.getDob());
 
+        // Step 6: Check roles
         if (request.getRoles() != null && !request.getRoles().isEmpty()) {
             user.setRoles(new HashSet<>(roleRepository.findAllById(request.getRoles())));
         }
 
-        return userMapper.toUserResponse(userRepository.save(user));
-    }
-
-    public void delete(String userId) {
-        userRepository.deleteById(userId);
-    }
-
-    @PostAuthorize("returnObject.username == authentication.name || returnObject.username == 'admin'")
-    public UserResponse getUserByID(String id) {
-        return userMapper.toUserResponse(userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User Not Found"))
+        // Finally: Return user response
+        return userMapper.toUserResponse(
+                // Save user into the database
+                userRepository.save(user)
         );
     }
 
-    public UserResponse myInfo() {
-        var context = SecurityContextHolder.getContext();
-        String name = context.getAuthentication().getName();
-        User user = userRepository.findByUsername(name).orElseThrow(
-                () -> new AppException(ErrorCodeEnum.USER_NOT_EXISTED));
-        return userMapper.toUserResponse(user);
+    @PostAuthorize("returnObject.username == authentication.name || returnObject.username == 'admin'")
+    public void delete(String userId) {
+        userRepository.deleteById(userId);
     }
 }

@@ -26,7 +26,7 @@ public enum ErrorCodeEnum {
     ),
     INVALID_PASSWORD(
             1004,
-            "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character",
+            "Password at least must have 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
             HttpStatus.BAD_REQUEST
     ),
     INVALID_JWS(
@@ -46,8 +46,33 @@ public enum ErrorCodeEnum {
     ),
     USER_NOT_EXISTED(
             1005,
-            "User not existed",
+            "User doesn't existed",
             HttpStatus.NOT_FOUND
+    ),
+    ROLE_EXISTED(
+            1002,
+            "This role existed",
+            HttpStatus.BAD_REQUEST
+    ),
+    ROLE_NOT_EXISTED(
+            1002,
+            "This role doesn't existed",
+            HttpStatus.BAD_REQUEST
+    ),
+    PERMISSION_EXISTED(
+            1002,
+            "This permission existed",
+            HttpStatus.BAD_REQUEST
+    ),
+    PERMISSION_NOT_EXISTED(
+            1002,
+            "This permission doesn't existed",
+            HttpStatus.BAD_REQUEST
+    ),
+    NOT_NULL_FILED(
+            1006,
+            "{field} field must not be null",
+            HttpStatus.UNAUTHORIZED
     ),
     UNAUTHENTICATED(
             1006,
