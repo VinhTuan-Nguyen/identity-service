@@ -22,18 +22,18 @@ public class PermissionService {
     PermissionRepository permissionRepository;
     PermissionMapper permissionMapper;
 
+    public List<PermissionResponse> getAll() {
+        return permissionRepository.findAll().stream()
+                .map(permissionMapper::toPermissionResponse).toList();
+    }
+
     public PermissionResponse create(PermissionRequest request) {
         Permission permission = permissionMapper.toPermission(request);
         permission = permissionRepository.save(permission);
         return permissionMapper.toPermissionResponse(permission);
     }
 
-    public List<PermissionResponse> getAll() {
-        return permissionRepository.findAll().stream()
-                .map(permissionMapper::toPermissionResponse).toList();
-    }
-
-    public void delete(PermissionEnum permission) {
+    public void delete(String permission) {
         permissionRepository.deleteById(permission);
     }
 }
