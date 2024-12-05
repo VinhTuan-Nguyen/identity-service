@@ -9,16 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'oracle'
           java-version: '21'
+
       - name: Build with Maven
         run: mvn clean install clean -DskipTests
-      - name: Merge to main
-        uses: EndBug/add-and-commit@v7
+
+      - name: Merge develop -> main
+        uses: devmasx/merge-branch@master
         with:
-          message: Merge from develop
-          branch: main
-        if: ${{ success() }}
+          type: now
+          from_branch: develop
+          target_branch: main
