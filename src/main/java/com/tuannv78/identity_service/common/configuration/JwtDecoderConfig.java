@@ -2,6 +2,7 @@ package com.tuannv78.identity_service.common.configuration;
 
 import com.nimbusds.jose.JOSEException;
 import com.tuannv78.identity_service.common.dto.request.IntrospectRequest;
+import com.tuannv78.identity_service.common.dto.response.IntrospectResponse;
 import com.tuannv78.identity_service.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +18,7 @@ import java.text.ParseException;
 import java.util.Objects;
 
 @Component
-public class JwtDecoderConfiguration implements JwtDecoder {
+public class JwtDecoderConfig implements JwtDecoder {
 
     @Value("${jwt.signer-key}")
     private String SIGNER_KEY;
@@ -30,10 +31,9 @@ public class JwtDecoderConfiguration implements JwtDecoder {
     @Override
     public Jwt decode(String token) throws JwtException {
         try {
-            var response = authenticationService.introspect(IntrospectRequest.builder()
+            IntrospectResponse response = authenticationService.introspect(IntrospectRequest.builder()
                     .token(token)
-                    .build()
-            );
+                    .build());
             if(!response.isValid())
                 throw new JwtException("Token invalid");
         } catch (JOSEException | ParseException e) {

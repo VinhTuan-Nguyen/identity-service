@@ -4,6 +4,13 @@ server:
   servlet:
     # ${server.servlet.context-path}
     context-path: /identity
+  cors:
+    # ${server.cors.allow-origin}
+    allow-origin: "http://localhost:3000"
+    # ${server.cors.allow-header}
+    allow-header: "*"
+    # ${server.cors.allow-method}
+    allow-method: "*"
 
 spring:
   application:

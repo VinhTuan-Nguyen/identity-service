@@ -1,6 +1,7 @@
 package com.tuannv78.identity_service.common.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,6 +22,14 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+    @Value("${server.cors.allow-origin}")
+    private static String corsAllowOrigin;
+
+    @Value("${server.cors.allow-header}")
+    private static String corsAllowHeader;
+
+    @Value("${server.cors.allow-method}")
+    private static String corsAllowMethod;
 
     private final String[] PUBLIC_ENDPOINT = {
             "/users",
@@ -31,7 +40,7 @@ public class SecurityConfig {
     };
 
     @Autowired
-    private JwtDecoderConfiguration jwtDecoderConfiguration;
+    private JwtDecoderConfig jwtDecoderConfig;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -42,7 +51,7 @@ public class SecurityConfig {
                         .authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
-                                .decoder(jwtDecoderConfiguration)
+                                .decoder(jwtDecoderConfig)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                         .authenticationEntryPoint(new AuthenticationEntryPointConfig())
                 )
@@ -52,23 +61,23 @@ public class SecurityConfig {
 
     @Bean
     public CorsFilter corsFilter() {
-        CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfiguration cors = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
+        cors.addAllowedOrigin(corsAllowOrigin);
+        cors.addAllowedHeader(corsAllowHeader);
+        cors.addAllowedMethod(corsAllowMethod);
 
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
+        UrlBasedCorsConfigurationSource config = new UrlBasedCorsConfigurationSource();
+        config.registerCorsConfiguration("/**", cors);
 
-        return new CorsFilter(urlBasedCorsConfigurationSource);
+        return new CorsFilter(config);
     }
 
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;

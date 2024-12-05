@@ -83,7 +83,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = ParseException.class)
     ResponseEntity<ApiResponse<Void>> handlingParseException(ParseException exception) {
         log.error(exception.getMessage());
-        ErrorCodeEnum errorCode = ErrorCodeEnum.JWS_NOT_VALID;
+        ErrorCodeEnum errorCode = ErrorCodeEnum.INVALID_JWS;
 
         return ResponseEntity
                 .badRequest()
