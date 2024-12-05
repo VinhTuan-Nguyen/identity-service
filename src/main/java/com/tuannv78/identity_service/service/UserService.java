@@ -64,15 +64,25 @@ public class UserService {
 
     public UserResponse update(String userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User Not Found"));
+                .orElseThrow(() -> new AppException(ErrorCodeEnum.USER_NOT_EXISTED));
 
-        userMapper.updateUser(user, request);
-
-        if (!user.getPassword().isEmpty()) {
+        // Check password
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
-        var roles = roleRepository.findAllById(request.getRoles());
+        if(request.getFirstName() != null && !request.getFirstName().isEmpty())
+            user.setFirstName(request.getFirstName());
+
+        if(request.getLastName() != null && !request.getLastName().isEmpty())
+            user.setFirstName(request.getLastName());
+
+        if(request.getDob() != null)
+            user.setDob(request.getDob());
+
+        if (request.getRoles() != null && !request.getRoles().isEmpty()) {
+            user.setRoles(new HashSet<>(roleRepository.findAllById(request.getRoles())));
+        }
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -83,7 +93,6 @@ public class UserService {
 
     @PostAuthorize("returnObject.username == authentication.name || returnObject.username == 'admin'")
     public UserResponse getUserByID(String id) {
-        log.info("In method get User by ID");
         return userMapper.toUserResponse(userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User Not Found"))
         );

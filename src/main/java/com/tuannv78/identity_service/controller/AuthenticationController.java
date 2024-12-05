@@ -1,7 +1,6 @@
 package com.tuannv78.identity_service.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
 import com.tuannv78.identity_service.common.dto.request.AuthenticationRequest;
 import com.tuannv78.identity_service.common.dto.request.IntrospectRequest;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.text.ParseException;
 
 @Slf4j
@@ -33,7 +33,8 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("/token")
-    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request)
+            throws IOException {
         try {
             // Logging request
             log.info("\nStarting request JWT token with:\n{}", object.toString(request));
@@ -53,7 +54,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/introspect")
-    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
+    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
+            throws ParseException, JOSEException, IOException {
         try {
             // Logging request
             log.info("\nStarting verify JWT token with:\n{}", object.toString(request));
@@ -73,7 +75,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+    ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshRequest request)
+            throws ParseException, JOSEException, IOException {
         try {
             // Logging request
             log.info("\nStarting refresh JWT token with:\n{}", object.toString(request));
@@ -93,7 +96,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException, IOException {
         try {
             // Logging request
             log.info("\nStarting Logout JWT token with:\n{}", object.toString(request));

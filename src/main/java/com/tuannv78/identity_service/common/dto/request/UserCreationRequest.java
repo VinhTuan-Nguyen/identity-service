@@ -1,6 +1,7 @@
 package com.tuannv78.identity_service.common.dto.request;
 
 import com.tuannv78.identity_service.common.annotations.DobConstraint;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -14,10 +15,13 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
 
-    @Size(min = 3, message = "USERNAME_INVALID")
+    @Size(min = 3, message = "INVALID_USERNAME")
     String username;
 
-    @Size(min = 8, message = "INVALID_PASSWORD")
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            message = "INVALID_PASSWORD"
+    )
     String password;
     String firstName;
     String lastName;
