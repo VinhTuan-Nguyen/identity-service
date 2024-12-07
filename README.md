@@ -40,9 +40,9 @@
 - Run project for first time (At this time, it will throw an error. but it's necessary to create a running configuration)
 - Click `Main menu` > `Run` > `Edit Configurations...` > `Environment variables` and then click and copy variables below
 
-![Environment-variables.png](guideline/Environment-variables.png)
+![Environment Variables Example](guideline/Environment-variables.png)
 
-- Environment Variables:
+- Environment Variables Example:
   + CORS_ALLOW_ORIGIN=`http://localhost:3000`
   + APP_INIT_USERNAME=`admin`
   + APP_INIT_PASSWORD=`admin`
@@ -73,4 +73,4 @@ docker run --network identity-service --name identity-service -p 8080:8080 \
 ```
 
 ## 2. Application Structure
-![Identity-Service-API.png](guideline/Identity-Service-API.png)
+![Application Structure](guideline/Identity-Service-API.png)
