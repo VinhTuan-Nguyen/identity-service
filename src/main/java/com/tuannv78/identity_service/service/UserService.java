@@ -46,7 +46,7 @@ public class UserService {
                 .toList();
     }
 
-    @PostAuthorize("returnObject.username == authentication.name || returnObject.username == 'admin'")
+    @PostAuthorize("returnObject.username == authentication.name || authentication.name == 'admin'")
     public UserResponse getUserByID(String id) {
         // Step 1: Verify whether the user exists in the Database
         User user = userRepository.findById(id)
@@ -95,7 +95,7 @@ public class UserService {
         );
     }
 
-    @PostAuthorize("returnObject.username == authentication.name || returnObject.username == 'admin'")
+    @PostAuthorize("returnObject.username == authentication.name || authentication.name == 'admin'")
     public UserResponse update(String userId, UserUpdateRequest request) {
         // Step 1: Verify whether the user exists in the Database
         User user = userRepository.findById(userId)
@@ -131,7 +131,7 @@ public class UserService {
         );
     }
 
-    @PostAuthorize("returnObject.username == authentication.name || returnObject.username == 'admin'")
+    @PostAuthorize("returnObject.username == authentication.name || authentication.name == 'admin'")
     public void delete(String userId) {
         userRepository.deleteById(userId);
     }

@@ -30,7 +30,9 @@ public class PermissionController {
         log.info("\nStarting get all permissions.");
 
         // Starting call permission service
-        ApiResponse<List<PermissionResponse>> response = ApiResponse.<List<PermissionResponse>>builder().result(permissionService.getAll()).build();
+        ApiResponse<List<PermissionResponse>> response = ApiResponse.<List<PermissionResponse>>builder()
+                .result(permissionService.getAll())
+                .build();
 
         // Logging response
         log.info("\nPermissions list:\n{}", json.toString(response));
@@ -45,10 +47,29 @@ public class PermissionController {
         log.info("\nStarting create permissions with: {}", json.toString(request));
 
         // Starting call permission service
-        ApiResponse<PermissionResponse> response = ApiResponse.<PermissionResponse>builder().result(permissionService.create(request)).build();
+        ApiResponse<PermissionResponse> response = ApiResponse.<PermissionResponse>builder()
+                .result(permissionService.create(request))
+                .build();
 
         // Logging response
         log.info("\nNew permission created:\n{}", json.toString(response));
+
+        return response;
+    }
+
+    @PutMapping
+    ApiResponse<PermissionResponse> update(@RequestParam String permission, @RequestParam String description)
+            throws IOException {
+        // Logging request
+        log.info("\nStarting update '{}' with description='{}'", permission, description);
+
+        // Starting call permission service
+        ApiResponse<PermissionResponse> response = ApiResponse.<PermissionResponse>builder()
+                .result(permissionService.updateDescription(permission, description))
+                .build();
+
+        // Logging response
+        log.info("\npermission updated:\n{}", json.toString(response));
 
         return response;
     }
@@ -61,7 +82,9 @@ public class PermissionController {
 
         // Starting call permission service
         permissionService.delete(permission);
-        ApiResponse<Void> response = ApiResponse.<Void>builder().message(String.format("Permission %s has been deleted", permission)).build();
+        ApiResponse<Void> response = ApiResponse.<Void>builder()
+                .message(String.format("Permission %s has been deleted", permission))
+                .build();
 
         // Logging response
         log.info("\nPermission deleted:\n{}", json.toString(response));

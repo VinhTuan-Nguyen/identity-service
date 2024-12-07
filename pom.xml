@@ -1,40 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
+    
     <groupId>com.tuannv78</groupId>
     <artifactId>identity-service</artifactId>
-    <version>1.0.0</version>
     <name>identity-service</name>
     <description>Identity Service</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+    <version>1.0.0</version>
+
     <properties>
         <java.version>21</java.version>
-        <projectlombok-lombok.version>1.18.30</projectlombok-lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <nimbusds.version>9.30.1</nimbusds.version>
         <jackson.version>2.18.1</jackson.version>
     </properties>
+    
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,7 +66,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${projectlombok-lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -95,13 +84,11 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
 
@@ -119,10 +106,10 @@
                     </excludes>
                 </configuration>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -130,13 +117,15 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>${projectlombok-lombok.version}</version>
+                            <version>${lombok.version}</version>
                         </path>
+                        
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
                             <version>${lombok-mapstruct-binding.version}</version>
                         </path>
+                        
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>

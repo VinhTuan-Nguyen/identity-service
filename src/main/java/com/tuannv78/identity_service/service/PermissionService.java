@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class PermissionService {
                 .toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public PermissionResponse create(PermissionRequest request) {
         // Step 1: Verify whether the permission exists in the Database
         if (permissionRepository.existsById(request.getName()))
@@ -48,17 +50,18 @@ public class PermissionService {
         );
     }
 
-    public PermissionResponse updateDescription(String name) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public PermissionResponse updateDescription(String request, String description) {
         // Step 1: Verify whether the permission exists in the Database
-        Permission permission = permissionRepository.findById(name)
+        Permission permission = permissionRepository.findById(request)
                 // Throw exception when the permission does not exist
                 .orElseThrow(() -> new AppException(ErrorCodeEnum.PERMISSION_NOT_EXISTED));
 
         // Step 2: Mapping new value
-        if (name != null && !name.isBlank())
-            permission.setDescription(name);
+        if (description != null && !description.isBlank())
+            permission.setDescription(description);
 
-        // Finnaly: Return permission response
+        // Finally: Return permission response
         return permissionMapper.toPermissionResponse(
                 // Save permission into the database
                 permissionRepository.save(permission)
@@ -66,6 +69,7 @@ public class PermissionService {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(String permission) {
         permissionRepository.deleteById(permission);
     }

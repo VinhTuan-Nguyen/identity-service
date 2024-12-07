@@ -65,8 +65,8 @@ public class ApplicationInitConfig {
             }
             log.info("\nChecking role default completed");
 
-            // If the permission does not exist. init a permission default
-            log.info("\nStarting check permission default");
+            // If the permission does not exist. init permissions default
+            log.info("\nStarting check permissions default");
             for (PermissionEnum per : PermissionEnum.values()) {
                 if (permissionRepository.findById(per.name()).isEmpty()) {
                     Permission permission = Permission.builder()

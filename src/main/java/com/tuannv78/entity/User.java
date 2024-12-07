@@ -30,6 +30,6 @@ public class User {
     String lastName;
     LocalDate dob;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     Set<Role> roles;
 }

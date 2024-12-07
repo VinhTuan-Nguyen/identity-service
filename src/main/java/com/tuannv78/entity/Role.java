@@ -19,6 +19,6 @@ public class Role {
     String name;
     String description;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     Set<Permission> permissions;
 }

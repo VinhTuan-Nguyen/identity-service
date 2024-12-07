@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -36,6 +37,7 @@ public class RoleService {
                 .toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public RoleResponse create(RoleRequest request) {
         // Step 1: Verify whether the role exists in the Database
         if (roleRepository.existsById(request.getName()))
@@ -54,6 +56,29 @@ public class RoleService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public RoleResponse update(RoleRequest request) {
+        // Step 1: Verify whether the role exists in the Database
+        Role role = roleRepository.findById(request.getName())
+                // Throw exception when the role does not exist
+                .orElseThrow(() -> new AppException(ErrorCodeEnum.ROLE_NOT_EXISTED));
+
+        // Step 2: Check description
+        if (request.getDescription() != null && !request.getDescription().isBlank())
+            role.setDescription(request.getDescription());
+
+        // Step 3: Check permissions
+        if (request.getPermissions() != null && !request.getPermissions().isEmpty())
+            role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissions())));
+
+        // Finally: Return role response
+        return roleMapper.toRoleResponse(
+                // Save role into the database
+                roleRepository.save(role)
+        );
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(String role) {
         roleRepository.deleteById(role);
     }

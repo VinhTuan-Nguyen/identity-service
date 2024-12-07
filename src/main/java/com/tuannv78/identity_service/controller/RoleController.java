@@ -51,6 +51,23 @@ public class RoleController {
         return response;
     }
 
+    @PutMapping
+    ApiResponse<RoleResponse> update(@RequestBody RoleRequest role)
+            throws IOException {
+        // Logging request
+        log.info("\nStarting update role with:\n{}'", role);
+
+        // Starting call role service
+        ApiResponse<RoleResponse> response = ApiResponse.<RoleResponse>builder()
+                .result(roleService.update(role))
+                .build();
+
+        // Logging response
+        log.info("\ndescription updated:\n{}", json.toString(response));
+
+        return response;
+    }
+
     @DeleteMapping("/{role}")
     ApiResponse<Void> delete(@PathVariable String role) throws IOException {
         // Logging request
