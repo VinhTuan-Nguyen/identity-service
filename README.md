@@ -15,7 +15,7 @@
 ```dockerfile
   docker run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root --name mysql-server -t mysql:8.0.36-debian
 ```
-- Download and install MySQL workbench in there: https://dev.mysql.com/downloads/workbench/
+- Download and install MySQL workbench [(Link to download)](https://dev.mysql.com/downloads/workbench/)
 - Creating MySQL connection interact with MySQL server:
   + Connection Name: `identity-service`
   + Hostname: `127.0.0.1`
@@ -35,7 +35,7 @@
   mvn clean install -DskipTests
 ```
 - Make sure that the application build is successful
-- Download and install IntelliJ IDEA Community Edition: `https://www.jetbrains.com/idea/download/?section=windows`
+- Download and install IntelliJ IDEA Community Edition [(Link to download)](https://www.jetbrains.com/idea/download/?section=windows)
 - Open this project by Intellij
 - Run project for first time (At this time, it will throw an error. but it's necessary to create a running configuration)
 - Click `Main menu` > `Run` > `Edit Configurations...` > `Environment variables` and then click and copy variables below
