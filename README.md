@@ -16,13 +16,14 @@
   docker run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root --name mysql-server -t mysql:8.0.36-debian
 ```
 - Download and install MySQL workbench in there: https://dev.mysql.com/downloads/workbench/
-- Creating MySQL connection interact to MySQL server:
+- Creating MySQL connection interact with MySQL server:
   + Connection Name: `identity-service`
   + Hostname: `127.0.0.1`
   + Port: `3306`
   + Username: `root`
   + Password: `root`
   + Default Schema: `identity-service` (for the first connection, there's no need to config)
+- Create a new schema called: identity-service (for the first setting)
 
 ### Step 2: Application Configuration
 - clone src from Git Hub:
