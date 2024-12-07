@@ -1,11 +1,12 @@
 # Identity Service API Application
-
-## 1. Run Application Guideline
 **Ensure that your device has been installed Java 21, Maven, and Docker Desktop before following the steps below**
 
 *Java and maven versions will be used in this project:*
 - Java version: 21.0.5
 - Maven version: 3.9.8
+
+## 1. Run Application Guideline
+
 ### Step 1: Setup MySQL Database
 - Pull MySQL server from Docker Hub:
 ```dockerfile
